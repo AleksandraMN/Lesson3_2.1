@@ -14,16 +14,21 @@ divElement.append(input);
 
 const pElement = document.createElement('p');
 divElement.append(pElement);
-let timeout;
 
-const getText = () => {
-  if (timeout) {
+
+function debounce(func, ms) {
+  let timeout;
+  return function() {
     clearTimeout(timeout);
-  }
-  timeout = setTimeout(() => {
-    pElement.textContent = input.value;
-  }, 300);
+    timeout = setTimeout(() => func.apply(this, arguments), ms);
+  };
 };
 
-input.addEventListener('input', getText);
+const getText = () => {
+  pElement.textContent = input.value;
+};
+
+const getTextLast = debounce(getText, 300);
+
+input.addEventListener('input', getTextLast);
 
